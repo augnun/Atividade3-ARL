@@ -1,0 +1,102 @@
+---
+title: "Atividade 3 - Análise de Regressão Linear"
+author: "Augusto Cesar Ribeiro Nunes - 13/0103004"
+date: "5 de junho de 2016"
+output: html_document
+---
+
+# Introdução
+
+Esta é a Atividade 3 da Disciplina Análise de Regressão Linear, ministrada pela professora Maria Teresa Leão Costa, ofertada pelo Departamento de Estatística da Universidade de Brasília em jun-2016.
+
+Existe um repositório no _site_ github referente a este trabalho: https://github.com/august-o/Atividade3-ARL
+
+# Questão 7.3 
+
+```{r, echo=FALSE}
+dados <- read.csv("6-5.txt", sep="", header = FALSE)
+names(dados) <- c("Y", "X1", "X2")
+```
+
+## (item a)
+
+```{r}
+modelo.completo <- lm(Y~X1+X2, data=dados)
+anova(modelo.completo)
+```
+Temos um modelo com a variável resposta a preferência pela marca, predita por umidade ($X_1$) e doçura($X_2$). Pela tabela de Análise de Variância acima, temos as somas de quadrados de regressão (SSR) referentes à inclusão das variáveis no modelo, em particular, $SSR(X_1) = 1566,45$ como Soma de Quadrados dada para _umidade ($X_1$)_ como única variável preditora, e $SSR(X_2|X_1) = 306,25$ como Soma de Quadrados para a inclusão da variável _doçura ($X_2$)_, dada a variável $X_1$. 
+
+## (item b)
+
+```{r}
+modelo.reduzido <- lm(Y~X1, data=dados)
+anova(modelo.reduzido,modelo.completo)
+```
+
+A Tabela ANOVA acima testa a hipótese nula $H_0: \beta_2 = 0$ no nosso modelo completo $Y_i = \beta_0 + \beta_1X_{i1} + \beta_2X{i2} + \varepsilon_i$. Como o valor da estatística de teste $F^*$ é grande, obtemos um p-valor da ordem de $10^{-5}$ e então __rejeitamos__ a hipótese nula com nível de significância superior ao de 0.01 dado e, finalmente, concluímos que a inclusão da variável $X_2$ é relevante para o nosso modelo.
+
+# Questão 7.24
+
+## (item a)
+```{r}
+modelo1 <- lm(Y~X1, data=dados)
+modelo1
+```
+
+A função de regressão simples ajustada é da forma $\hat{Y} = 50,775 + 4,425X_{1}$.
+
+## (item b)
+
+Na questão 6.5 item b é pedido que se ajuste um modelo de regressão múltipla para a resposta Y usando $X_1$ e $X_2$ como variáveis preditoras.
+
+```{r}
+modelo.multiplo <- lm(Y~X1+X2, data=dados)
+modelo.multiplo
+```
+
+Note que o coeficiente de $X_1$ na regressão simples é igual ao coeficiente de $X_1$ na regressão múltipla.
+
+## (item c)
+
+```{r}
+modelo.simples.X2 <- lm(Y~X2, data=dados)
+modelo.simples.X2
+anova(modelo.simples.X2)
+
+modelo.completo.X2X1 <- lm(Y~X2 + X1, data=dados)
+anova(modelo.completo.X2X1)
+```
+
+Note que $SSR(X_1)$ na primeira Tabela Anova é igual a $SSR(X_1|X_2)$ na segunda.
+
+## (item d)
+
+```{r}
+cor(dados)
+```
+
+A matriz de correlação acima indica que __não há correlação entre $X_1$ e $X_2$__, ou seja, o coeficiente de determinação simples entre $X_1$ e $X_2$ é nulo. Portanto, como as variáveis preditoras são __não-correlacionadas__, os efeitos devidos a cada uma delas em uma regressão de 1a ordem são os mesmos não importando a ordem em que elas são incluídas no modelo.
+
+# Questão 7.30
+
+## (item a)
+```{r}
+modelo.simples.X2 <- lm(Y~X2, data=dados)
+residuals(modelo.simples.X2)
+```
+
+## (item b)
+```{r}
+modelo.simples.X1X2 <- lm(X1 ~ X2, data=dados)
+residuals(modelo.simples.X1X2)
+```
+
+## (item c)
+```{r}
+cor(residuals(modelo.simples.X2), residuals(modelo.simples.X1X2))
+require("asbio")
+partial.R2(modelo.simples.X2, modelo.completo)
+```
+
+O Coeficiente de Correlação Parcial $R_{Y|12}$ é _aproximadamente_ igual à correlação dos conjuntos de resíduos.
+
