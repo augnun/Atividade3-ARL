@@ -1,0 +1,36 @@
+---
+title: "Atividade 3 - Análise de Regressão Linear"
+author: "Augusto Cesar Ribeiro Nunes - 13/0103004"
+date: "June 2, 2016"
+output: pdf_document
+---
+```{r preludio, echo = FALSE}
+dados <- read.csv("6-5.txt", sep="", header = FALSE)
+colnames(dados) <- c("Y", "X1", "X2")
+```
+
+
+# Introdução
+
+Esta é a Atividade 3 da disciplina Análise de Regressão Linear, ministrada pela Professora Maria Teresa Leão Costa, do Departamento de Estatística da Universidade de Brasília em junho-2016.
+
+Este trabalho encontra-se em um repositório no site github.com: https://github.com/august-o/Atividade3-ARL
+
+# Exercício 7.3 
+
+```{r 7-3a, echo=FALSE}
+modelo.X1 <- lm(Y ~ X1, data=dados)
+aov(modelo.X1)
+
+modelo.X2X1 <- lm(Y ~ X1 + X2, data=dados)
+aov(modelo.X2X1)
+```
+
+# Exercício 7.24
+
+Mesmos dados da 7.3
+
+
+# Exercício 7.30 
+
+Ibidem
